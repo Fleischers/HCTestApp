@@ -1,4 +1,4 @@
-This project is a simple http server implemented with Netty framework. 
+This project is a simple http server created with Netty framework. 
 Created as @HamsterCoders assignment.
 Author: @Fleischers.
 
@@ -7,7 +7,7 @@ Author: @Fleischers.
 	- About 10000? queries per second
 
 #How to build:
-	- Apache Maven is needed (working poperly with 3.1.0)
+	- Apache Maven is needed (working properly with 3.1.0)
 	- Run "mvn clean compile assembly:single" in the directory with "pom.xml" file.
 		or simply use "mvn-compile.bat" if using OS Windows.
 

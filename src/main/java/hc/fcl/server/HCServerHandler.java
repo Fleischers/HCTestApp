@@ -9,6 +9,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.util.CharsetUtil;
 
 //import java.util.logging.Logger;
@@ -45,16 +46,46 @@ public class HCServerHandler extends ChannelInboundHandlerAdapter {
 			String url = req.getUri();
 			if (req.getMethod() == GET && url != null) {
 				if ("/hello".equals(url)) {
+					System.out.print("/hello ");
 					res = new DefaultFullHttpResponse (HTTP_1_1, OK, CONTENT.duplicate());
 					res.headers().set(CONTENT_TYPE, "text/plain");
 					res.headers().set(CONTENT_LENGTH, res.content().readableBytes());
 					Thread.sleep(10000);
 					sendHttpResponse(ctx, req, res);
 				}
+				else if (url.startsWith("/redirect")) {
+					System.out.print("/redirect ");
+					QueryStringDecoder dec = new QueryStringDecoder(url);
+					String redirectUrl = dec.parameters().get("url").get(0);
+					res = new DefaultFullHttpResponse(HTTP_1_1, MOVED_PERMANENTLY);
+					redirect (ctx, redirectUrl, res);
+					
+				}
+				else if ("/status".equals(url)) {
+					System.out.print("/status ");
+					
+				}
+				else {
+					res = new DefaultFullHttpResponse (HTTP_1_1, NOT_FOUND);
+					sendHttpResponse(ctx, req, res);
+				}
+			}
+			else {
+				res = new DefaultFullHttpResponse (HTTP_1_1, FORBIDDEN);
+				sendHttpResponse(ctx, req, res);
 			}
 		}
 
 
+	}
+
+	private void redirect(ChannelHandlerContext ctx, String redirectUrl, FullHttpResponse res) {
+		if (!redirectUrl.substring(0, 7).equals("http://")) {
+            redirectUrl = "http://" + redirectUrl;
+        }
+		res.headers().set(LOCATION, redirectUrl);
+		ctx.writeAndFlush(res).addListener(ChannelFutureListener.CLOSE);
+		
 	}
 
 	private void sendHttpResponse(ChannelHandlerContext ctx, FullHttpRequest req, FullHttpResponse res) {
@@ -74,7 +105,7 @@ public class HCServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelReadComplete (ChannelHandlerContext ctx) throws Exception {
 		ctx.flush();
-		//ctx.close();
+		
 		
 	}
 	
