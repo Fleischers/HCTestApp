@@ -2,14 +2,9 @@ package hc.fcl.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpServerCodec;
 
 import java.util.logging.Logger;
 
@@ -18,6 +13,7 @@ import java.util.logging.Logger;
 public class HCServer {
 	private int port;
 	private static final Logger logger = Logger.getLogger(HCServer.class.getName());
+	Statistics sts = new Statistics();
 	
 	public HCServer (int port) {
 		this.port=port;
@@ -31,15 +27,7 @@ public class HCServer {
 			ServerBootstrap b = new ServerBootstrap();
 			b.group(BossGroup, WorkerGroup);
 			b.channel(NioServerSocketChannel.class);
-			b.childHandler(new ChannelInitializer<SocketChannel>() {
-				@Override
-				public void initChannel(SocketChannel ch) throws Exception {
-					ChannelPipeline pipeline = ch.pipeline();
-					pipeline.addLast(new HttpServerCodec());
-					pipeline.addLast(new HttpObjectAggregator(65536));
-					pipeline.addLast(new HCServerHandler());
-				}
-			});
+			b.childHandler(new HCServerInitializer(sts));
 						
 			ChannelFuture f = b.bind(port).sync();
 			logger.info("Server is listening at http://localhost:"+port+"/");
