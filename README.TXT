@@ -27,3 +27,6 @@ Author: @Fleischers.
 		Go to browser at http://localhost:8080/ and follow the instructions
 		
 
+# Notes: 
+	- You can simply download already compiled jar file from "target" directory
+	- See screenshots in "Screenshots" folder
