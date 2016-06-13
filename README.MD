@@ -2,11 +2,11 @@ This project is a simple http server created with Netty framework.
 Created as @HamsterCoders assignment.
 Author: @Fleischers.
 
-# Basic features:
+## Basic features:
 	- Asynchronous I/O
 	- About 700 queries per second
 
-# How to build:
+## How to build:
 	## With Maven
 	- Apache Maven is needed (working properly with 3.1.0)
 	- Run "mvn clean compile assembly:single" in the directory with "pom.xml" file.
@@ -15,7 +15,7 @@ Author: @Fleischers.
 	- Install Netty 4-0-9-Final
 	- Start compile from main class HCServer.java and add Netty to your classpath
 
-# How to run:
+## How to run:
 	## Server side use
 		Run in command line 
 "java -jar target\HCServer-1.0-SNAPSHOT-jar-with-dependencies.jar" 
@@ -27,6 +27,6 @@ Author: @Fleischers.
 		Go to browser at http://localhost:8080/ and follow the instructions
 		
 
-# Notes: 
+## Notes: 
 	- You can simply download already compiled jar file from "target" directory
 	- See screenshots in "Screenshots" folder
